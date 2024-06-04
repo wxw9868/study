@@ -12,27 +12,22 @@ import (
 	//"github.com/go-vgo/robotgo"
 )
 
-var (
-	sigs1 chan os.Signal
-)
+func HuaweiMail() {
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-func init() {
-	sigs1 = make(chan os.Signal, 1)
-	signal.Notify(sigs1, syscall.SIGINT, syscall.SIGTERM)
-}
-
-func main() {
-	const (
+	var (
 		// These paths will be different on your system.
-		seleniumPath    = "C:/Users/Administrator/Desktop/python/selenium-server-standalone-3.8.1.jar"
+		// seleniumPath = "C:/Users/Administrator/Desktop/python/selenium-server-standalone-3.8.1.jar"
 		//geckoDriverPath = "C:/Users/Administrator/Desktop/python/geckodriver.exe"
 		chromeDriverPath = "C:/Users/Administrator/Desktop/python/chromedriver.exe"
-		port            = 8080
+		port             = 8080
 	)
+
 	opts := []selenium.ServiceOption{
 		//selenium.GeckoDriver(geckoDriverPath), // Specify the path to GeckoDriver in order to use Firefox.
 		selenium.ChromeDriver(chromeDriverPath),
-		selenium.Output(ioutil.Discard),       // Output debug information to STDERR.
+		selenium.Output(ioutil.Discard), // Output debug information to STDERR.
 	}
 	selenium.SetDebug(false)
 	//service, err := selenium.NewSeleniumService(seleniumPath, port, opts...)
@@ -55,7 +50,6 @@ func main() {
 		panic(err)
 	}
 	//defer wd.Quit()
-
 
 	// Navigate to the simple playground interface.
 	if err := wd.Get("https://id1.cloud.huawei.com/CAS/portal/loginAuth.html?validated=true&themeName=red&service=https%3A%2F%2Fwww.vmall.com%2Faccount%2Fcaslogin%3Furl%3Dhttps%253A%252F%252Fwww.vmall.com%252Fproduct%252F10086726905036.html&loginChannel=26000000&reqClientType=26&lang=zh-cn"); err != nil {
@@ -91,7 +85,8 @@ func main() {
 	}
 	btn.Click()
 
-	<-sigs1
+	<-sigs
+
 	//time.Sleep(2 * time.Second)
 	//
 	//slider, err := wd.FindElement(selenium.ByCSSSelector, ".geetest_slider_button")
@@ -119,6 +114,4 @@ func main() {
 		}
 		search.Click()
 	*/
-
-
 }

@@ -69,23 +69,23 @@ func main() {
 	}
 
 	//err := ffmpeg.Input("C:\\Users\\wxw9868\\go\\src\\video\\assets\\video\\123118_790_まんチラの誘惑_〜欲求不満な友達のママ〜 _古瀬玲.mp4", ffmpeg.KwArgs{"ss": "1"}).
-	//	Output("C:\\Users\\wxw9868\\go\\src\\study\\test\\video\\out2.gif", ffmpeg.KwArgs{"pix_fmt": "rgb24", "t": "3", "r": "3", "vf": "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"}).
+	//	Output("C:\\Users\\wxw9868\\go\\src\\github.com/wxw9868/study\\test\\video\\out2.gif", ffmpeg.KwArgs{"pix_fmt": "rgb24", "t": "3", "r": "3", "vf": "split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"}).
 	//	OverWriteOutput().ErrorToStdOut().Run()
 	//if err != nil {
 	//	log.Fatal(err)
 	//}
 
-	//reader := ExampleReadFrameAsJpeg("C:\\Users\\wxw9868\\go\\src\\study\\test\\video\\lc.mp4", 5)
+	//reader := ExampleReadFrameAsJpeg("C:\\Users\\wxw9868\\go\\src\\github.com/wxw9868/study\\test\\video\\lc.mp4", 5)
 	//img, err := imaging.Decode(reader)
 	//if err != nil {
 	//	log.Fatal(err)
 	//}
-	//err = imaging.Save(img, "C:\\Users\\wxw9868\\go\\src\\study\\test\\video\\out1.jpeg")
+	//err = imaging.Save(img, "C:\\Users\\wxw9868\\go\\src\\github.com/wxw9868/study\\test\\video\\out1.jpeg")
 	//if err != nil {
 	//	log.Fatal(err)
 	//}
 
-	//_, err := GetSnapshot("C:\\Users\\wxw9868\\go\\src\\study\\test\\video\\lc.mp4", "C:\\Users\\wxw9868\\go\\src\\study\\test\\video\\test", 1)
+	//_, err := GetSnapshot("C:\\Users\\wxw9868\\go\\src\\github.com/wxw9868/study\\test\\video\\lc.mp4", "C:\\Users\\wxw9868\\go\\src\\github.com/wxw9868/study\\test\\video\\test", 1)
 	//if err != nil {
 	//	return
 	//}

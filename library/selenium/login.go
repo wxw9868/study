@@ -12,23 +12,17 @@ import (
 	//"github.com/go-vgo/robotgo"
 )
 
-var (
-	sigs chan os.Signal
-)
-
-func init() {
-	sigs = make(chan os.Signal, 1)
+func login() {
+	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-}
 
-const (
-	// These paths will be different on your system.
-	seleniumPath    = "E:\\selenium\\selenium-server-standalone-3.8.1.jar"
-	geckoDriverPath = "E:\\selenium\\geckodriver.exe"
-	port            = 8080
-)
+	var (
+		// These paths will be different on your system.
+		seleniumPath    = "E:\\selenium\\selenium-server-standalone-3.8.1.jar"
+		geckoDriverPath = "E:\\selenium\\geckodriver.exe"
+		port            = 8080
+	)
 
-func main() {
 	opts := []selenium.ServiceOption{
 		selenium.GeckoDriver(geckoDriverPath), // Specify the path to GeckoDriver in order to use Firefox.
 		selenium.Output(ioutil.Discard),       // Output debug information to STDERR.

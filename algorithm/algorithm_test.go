@@ -1,7 +1,7 @@
 package algorithm
 
 import (
-	"study/utils"
+	"github.com/wxw9868/study/utils"
 	"testing"
 )
 

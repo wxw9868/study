@@ -2,7 +2,7 @@ package token
 
 import (
 	"fmt"
-	"study/utils"
+	"github.com/wxw9868/study/utils"
 	"testing"
 )
 

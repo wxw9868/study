@@ -2,7 +2,7 @@ package a
 
 import (
 	"fmt"
-	"study/basics/init/c"
+	"github.com/wxw9868/study/basics/init/c"
 )
 
 func Print() {

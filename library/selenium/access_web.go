@@ -8,11 +8,12 @@ import (
 	"github.com/tebeka/selenium/chrome"
 )
 
-const (
-	chromePath = `C:\Program Files\Google\Chrome\Application\chrome.exe`
-)
+func AccessWeb() {
+	var (
+		chromePath = `C:\Program Files\Google\Chrome\Application\chrome.exe`
+		port       = 8081
+	)
 
-func main() {
 	//如果seleniumServer没有启动，就启动一个seleniumServer所需要的参数，可以为空，示例请参见https://github.com/tebeka/selenium/blob/master/example_test.go
 	opts := []selenium.ServiceOption{
 		//selenium.StartFrameBuffer(),           // Start an X frame buffer for the browser to run in.
@@ -86,7 +87,5 @@ func main() {
 		return
 	}
 	//w_b就是当前页面的对象，通过该对象可以操作当前页面了
-	//........
 	time.Sleep(5 * time.Minute)
-	return
 }

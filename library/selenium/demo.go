@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
+
 	"github.com/tebeka/selenium"
-	"io/ioutil"
 )
 
 func main() {
@@ -17,7 +18,7 @@ func main() {
 	)
 	opts := []selenium.ServiceOption{
 		selenium.GeckoDriver(geckoDriverPath), // Specify the path to GeckoDriver in order to use Firefox.
-		selenium.Output(ioutil.Discard),       // Output debug information to STDERR.
+		selenium.Output(io.Discard),           // Output debug information to STDERR.
 	}
 	selenium.SetDebug(false)
 	service, err := selenium.NewSeleniumService(seleniumPath, port, opts...)
