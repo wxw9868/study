@@ -3,12 +3,38 @@ package concurrency
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"runtime"
 	"strconv"
 	"sync"
 	"sync/atomic"
 	"time"
 )
+
+// MutexAndGoroutine 锁和goroutine的关系
+func MutexAndGoroutine() {
+	ch := make(chan struct{}, 2)
+	var mutex sync.Mutex
+	go func() {
+		mutex.Lock()
+		defer mutex.Unlock()
+		fmt.Println("goroutine1: 我会锁定大概 2s")
+		time.Sleep(time.Second * 2)
+		fmt.Println("goroutine1: 我解锁了，你们去抢吧")
+		ch <- struct{}{}
+	}()
+	go func() {
+		fmt.Println("goroutine2: 等待解锁")
+		mutex.Lock()
+		defer mutex.Unlock()
+		fmt.Println("goroutine2: 欧耶，我也解锁了")
+		ch <- struct{}{}
+	}()
+	// 等待 routine 执行结束
+	for i := 0; i < 2; i++ {
+		<-ch
+	}
+}
 
 // 查看协程数量
 func CheckTheNumberOfGoroutines() {
@@ -238,6 +264,39 @@ func UsingMutexesToResolveDataRaces() {
 	}
 	wg.Wait()
 	fmt.Printf("ans: %v\n", ans)
+}
+
+// UsingReadWriteLocks 使用读写锁
+func UsingReadWriteLocks() {
+	var count int
+	var rw sync.RWMutex
+	ch := make(chan struct{}, 10)
+	read := func(n int, ch chan struct{}) {
+		rw.RLock()
+		fmt.Printf("routine %d 进入读操作...\n", n)
+		v := count
+		fmt.Printf("routine %d 读取结束，值为：%d\n", n, v)
+		rw.RUnlock()
+		ch <- struct{}{}
+	}
+	write := func(n int, ch chan struct{}) {
+		rw.Lock()
+		fmt.Printf("routine %d 进入写操作...\n", n)
+		v := rand.Intn(1000)
+		count = v
+		fmt.Printf("routine %d 写入结束，新值为：%d\n", n, v)
+		rw.Unlock()
+		ch <- struct{}{}
+	}
+	for i := 0; i < 5; i++ {
+		go read(i, ch)
+	}
+	for i := 0; i < 5; i++ {
+		go write(i, ch)
+	}
+	for i := 0; i < 10; i++ {
+		<-ch
+	}
 }
 
 // AtomicOperations 原子级操作

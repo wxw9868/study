@@ -8,7 +8,9 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
+	"syscall"
 )
 
 // 遍历文件夹
@@ -30,9 +32,9 @@ func recursive(dir string) {
 		if file.IsDir() {
 			recursive(dir + "/" + file.Name())
 		}
-		name := file.Name()
-		if filepath.Ext(name) == ".jpg" {
-			arr := strings.Split(strings.Split(name, ".")[0], "_")
+		filename := file.Name()
+		if filepath.Ext(filename) == ".jpg" {
+			arr := strings.Split(strings.Split(filename, ".")[0], "_")
 			actress[arr[len(arr)-1]] = struct{}{}
 			if len(arr[len(arr)-2]) < 20 && len(arr[len(arr)-2]) > 6 {
 				_, ok := actress[arr[len(arr)-2]]
@@ -94,3 +96,95 @@ func ReadWriteFile() {
 		log.Fatal(err)
 	}
 }
+
+// MoveFile 移动文件并修改文件名称
+func MoveFile(oldPath, newPath string) error {
+	if runtime.GOOS == "windows" { //跨卷移动
+		from, err := syscall.UTF16PtrFromString(oldPath)
+		if err != nil {
+			log.Fatalf("%v", err)
+			return err
+		}
+		to, err := syscall.UTF16PtrFromString(newPath)
+		if err != nil {
+			log.Fatalf("%v", err)
+			return err
+		}
+		//windows API
+		if err = syscall.MoveFile(from, to); err != nil {
+			log.Fatalf("%v", err)
+			return err
+		}
+	} else {
+		if err := os.Rename(oldPath, newPath); err != nil {
+			log.Fatalf("%v", err)
+			return err
+		}
+	}
+	return nil
+}
+
+// const (
+// 	FILE_PATH = "D:\\浏览器下载"
+// 	MOVE_PATH = "K:\\Git项目备份"
+// )
+
+// var lists = map[string]string{
+// 	"bbs":                  "\\BBS",
+// 	"bbsMas":               "\\BBS\\VUE\\后台",
+// 	"bbsMan":               "\\BBS\\VUE\\前台",
+// 	"community":            "\\community",
+// 	"crm":                  "\\CRM",
+// 	"VIM":                  "\\VIM",
+// 	"hyjr":                 "\\会员金融",
+// 	"cmf":                  "\\企业联盟",
+// 	"business_card":        "\\企业联盟\\名片推广",
+// 	"wenku":                "\\文库",
+// 	"java":                 "\\小程序",
+// 	"xiaoochengxu":         "\\小程序",
+// 	"shop":                 "\\艺券商城",
+// 	"yipiao_mail":          "\\艺券商城",
+// 	"bank":                 "\\银行",
+// 	"bank_boot":            "\\银行\\boot",
+// 	"bank_bus":             "\\银行\\bus",
+// 	"bank_client":          "\\银行\\client",
+// 	"bank_com":             "\\银行\\com",
+// 	"bank_cus":             "\\银行\\cus",
+// 	"bank_cus-master-vue":  "\\银行\\cus\\VUE",
+// 	"bank_dubbo":           "\\银行\\dubbo",
+// 	"bank_loan":            "\\银行\\loan",
+// 	"bank_OA":              "\\银行\\OA",
+// 	"bank_customer_system": "\\银行\\customer_system",
+// 	"banniban_bbs":         "\\帮你办社区",
+// 	"stock":                "\\股票",
+// }
+
+// // 遍历文件夹中的文件
+// func ReadDir() error {
+// 	list, err := ioutil.ReadDir(FILE_PATH)
+// 	if err != nil {
+// 		log.Fatalf("%v", err)
+// 	}
+// 	for _, fi := range list {
+// 		if !fi.IsDir() {
+// 			filename := fi.Name()
+// 			for k, v := range lists {
+// 				if strings.Contains(filename, k) {
+// 					s := strings.LastIndex(filename, "-")
+// 					e := strings.LastIndex(filename, ".")
+// 					content := filename[s+1 : e]
+// 					date := time.Now().Format("2006.01.02")
+// 					rename := strings.Replace(filename, content, date, -1)
+// 					oldPath := FILE_PATH + "\\" + filename
+// 					newPath := MOVE_PATH + v + "\\" + rename
+// 					if err = moveFile(oldPath, newPath); err != nil {
+// 						log.Fatalf("%v", err)
+// 						return err
+// 					}
+// 					fmt.Println(oldPath + " >> " + newPath)
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return nil
+// }
