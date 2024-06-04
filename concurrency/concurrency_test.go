@@ -1,12 +1,13 @@
 package concurrency
 
 import (
-	"study/utils"
 	"testing"
 )
 
 func TestMain(t *testing.T) {
-	utils.MethodRuntime(CheckTheNumberOfGoroutines)
+
+	// utils.MethodRuntime(MutexAndGoroutine)
+	// utils.MethodRuntime(CheckTheNumberOfGoroutines)
 	// utils.MethodRuntime(UseChannelsToControlOutputOrder)
 	// utils.MethodRuntime(TimeoutExit)
 	// utils.MethodRuntime(ProduceAndConsume)
@@ -14,5 +15,6 @@ func TestMain(t *testing.T) {
 	// utils.MethodRuntime(ReusingGoroutine)
 	// utils.MethodRuntime(UsingMutexLock)
 	// utils.MethodRuntime(UsingMutexesToResolveDataRaces)
+	// utils.MethodRuntime(UsingReadWriteLocks)
 	// utils.MethodRuntime(AtomicOperations)
 }
