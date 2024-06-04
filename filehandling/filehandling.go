@@ -30,7 +30,7 @@ func recursive(dir string) {
 
 	for _, file := range files {
 		if file.IsDir() {
-			recursive(dir + "/" + file.Name())
+			recursive(filepath.Join(dir, "/", file.Name()))
 		}
 		filename := file.Name()
 		if filepath.Ext(filename) == ".jpg" {
