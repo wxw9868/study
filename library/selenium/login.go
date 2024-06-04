@@ -12,7 +12,7 @@ import (
 	//"github.com/go-vgo/robotgo"
 )
 
-func login() {
+func Login() {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
