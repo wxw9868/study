@@ -7,4 +7,6 @@ basics 基础知识
 algorithm 算法  
 datastructure 数据结构  
 library 第三方库  
-practise 练习   
+practise 练习  
+design_mode 设计模式  
+pen_questions 笔试题

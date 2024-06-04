@@ -13,7 +13,8 @@ import (
 const (
 
 	// 先get获取，如果有就刷新ttl，没有再set。 这种是可重入锁，防止在同一线程中多次获取锁而导致死锁发生。
-	lockCommand = `if redis.call("GET", KEYS[1]) == ARGV[1] then
+	lockCommand = `
+if redis.call("GET", KEYS[1]) == ARGV[1] then
 	redis.call("SET", KEYS[1], ARGV[1], "PX", ARGV[2])
 	return "OK"
 else
@@ -21,7 +22,8 @@ else
 end`
 
 	// 删除。必须先匹配id值，防止A超时后，B马上获取到锁，A的解锁把B的锁删了
-	delCommand = `if redis.call("GET", KEYS[1]) == ARGV[1] then
+	delCommand = `
+if redis.call("GET", KEYS[1]) == ARGV[1] then
 	return redis.call("DEL", KEYS[1])
 else
 	return 0

@@ -49,8 +49,3 @@ func TestDoSearch(t *testing.T) {
 	slice := []int{23, 32, 78, 43, 76, 65, 345, 762, 915, 86}
 	DoSearch(slice)
 }
-
-func TestBubbleSort(t *testing.T) {
-	arr := []int{2, 5, 3, 6, 1, 9, 8, 4, 7}
-	fmt.Println(BubbleSort(arr))
-}

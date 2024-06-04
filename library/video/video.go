@@ -3,12 +3,13 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/disintegration/imaging"
-	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"io"
 	"log"
 	"os"
 	"strings"
+
+	"github.com/disintegration/imaging"
+	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
 func GetSnapshot(videoPath, snapshotPath string, frameNum int) (snapshotName string, err error) {
@@ -88,5 +89,4 @@ func main() {
 	//if err != nil {
 	//	return
 	//}
-
 }

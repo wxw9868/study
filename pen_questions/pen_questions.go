@@ -273,6 +273,36 @@ func execute(rows string) {
 	println(result)
 }
 
+// func execute(rows string) {
+// 	for _, row := range strings.Split(rows, "\n") {
+// 		result := ""
+// 		inPuote := false
+// 		for i := 0; i < len(row); i++ {
+// 			ch := string(row[i])
+// 			if ch == "\"" {
+// 				if inPuote {
+// 					if i+1 < len(row) && string(row[i+1]) == "\"" {
+// 						result += ch
+// 						i++
+// 					} else {
+// 						inPuote = false
+// 					}
+// 				} else {
+// 					inPuote = true
+// 				}
+// 			} else if ch == "," {
+// 				if inPuote {
+// 					result += ch
+// 				} else {
+// 					result += "\t"
+// 				}
+// 			} else {
+// 				result += ch
+// 			}
+// 		}
+// 		println(result)
+// 	}
+// }
 //func execute(rows string) {
 //	for _, row1 := range strings.Split(rows, "\n") {
 //		row := []rune(row1)

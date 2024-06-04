@@ -1,4 +1,4 @@
-package other
+package sync_map
 
 import (
 	"fmt"
@@ -9,8 +9,7 @@ import (
 )
 
 func TestMap(t *testing.T) {
-	m := NewMap()
-
+	m := New()
 	var wg sync.WaitGroup
 	wg.Add(runtime.NumCPU())
 

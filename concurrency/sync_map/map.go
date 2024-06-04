@@ -1,4 +1,4 @@
-package other
+package sync_map
 
 import "sync"
 
@@ -7,7 +7,7 @@ type Map struct {
 	data map[string]interface{}
 }
 
-func NewMap() *Map {
+func New() *Map {
 	return &Map{data: make(map[string]interface{})}
 }
 

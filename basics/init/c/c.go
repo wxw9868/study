@@ -1,4 +1,4 @@
-package adm
+package c
 
 import "fmt"
 
@@ -6,7 +6,7 @@ var count int
 
 func init() {
 	count++
-	fmt.Println("oo")
+	fmt.Println("init")
 }
 
 func Get() int {

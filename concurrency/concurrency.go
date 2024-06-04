@@ -11,6 +11,42 @@ import (
 	"time"
 )
 
+// TimeoutOnCloseChannel 超时关闭channel并退出程序
+func TimeoutOnCloseChannel() {
+	wg := sync.WaitGroup{}
+	c := make(chan struct{})
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func(num int, close <-chan struct{}) {
+			defer wg.Done()
+			<-close
+			fmt.Println(num)
+		}(i, c)
+	}
+
+	if WaitTimeout(&wg, time.Second*5) {
+		close(c)
+		fmt.Println("timeout exit")
+	}
+	time.Sleep(time.Second * 10)
+}
+
+func WaitTimeout(wg *sync.WaitGroup, timeout time.Duration) bool {
+	t := time.NewTimer(timeout)
+	ch := make(chan bool)
+	go func() {
+		<-t.C
+		ch <- true
+	}()
+
+	go func() {
+		wg.Wait()
+		ch <- false
+	}()
+
+	return <-ch
+}
+
 // MutexAndGoroutine 锁和goroutine的关系
 func MutexAndGoroutine() {
 	ch := make(chan struct{}, 2)
@@ -105,6 +141,66 @@ func TimeoutExit() {
 		}
 	}
 	timer()
+}
+
+// NewTicker 定时轮询
+func NewTicker() {
+	var wg sync.WaitGroup
+
+	ticker := time.NewTicker(1 * time.Second)
+	quit := make(chan int)
+
+	wg.Add(1)
+	go func() {
+		defer func() {
+			fmt.Println("child routine bootstrap end")
+			wg.Done()
+		}()
+		fmt.Println("child routine bootstrap start")
+		for {
+			select {
+			case <-ticker.C:
+				fmt.Println("ticker .")
+			case <-quit:
+				fmt.Println("work well .")
+				ticker.Stop()
+				return
+			}
+		}
+	}()
+	time.Sleep(10 * time.Second)
+
+	quit <- 1
+	wg.Wait()
+}
+
+// RunTask 手动停止定时任务
+func RunTask() {
+	ctx, cancel := context.WithCancel(context.Background())
+	wg := new(sync.WaitGroup)
+	timeTask := func(ctx context.Context, wg *sync.WaitGroup) {
+		defer wg.Done()
+		task := func(i int) {
+			fmt.Println(i)
+		}
+		ticker := time.NewTicker(1 * time.Second)
+		var i int
+		for {
+			select {
+			case <-ticker.C:
+				i++
+				task(i)
+			case <-ctx.Done():
+				fmt.Println("Done")
+				return
+			}
+		}
+	}
+	wg.Add(1)
+	go timeTask(ctx, wg)
+	time.Sleep(time.Second * 5)
+	cancel()
+	wg.Wait()
 }
 
 // ProduceAndConsume 生产者消费者
