@@ -8,10 +8,45 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
-	"syscall"
+	"time"
 )
+
+func MergeData() {
+	// var actress1 = make(map[string]struct{})
+	// var actress2 = make(map[string]struct{})
+	// ReadFileToMap("actress.json", &actress1)
+	// ReadFileToMap("new.json", &actress2)
+	// for k, _ := range actress2 {
+	// 	if _, ok := actress1[k]; !ok {
+	// 		actress1[k] = struct{}{}
+	// 		delete(actress2, k)
+	// 	}
+	// }
+	// WriteMapToFile("MergeData.json", &actress1)
+
+	var data = make(map[string]struct{})
+	ReadFileToMap("MergeData.json", &data)
+
+	var actressSql = "INSERT OR REPLACE INTO video_Actress (actress, avatar, CreatedAt, UpdatedAt) VALUES "
+
+	for actress, _ := range data {
+		avatarPath := avatarDir + "/" + actress + ".png"
+
+		_, err := os.Stat(avatarPath)
+		if os.IsNotExist(err) {
+			nameSlice := []rune(actress)
+			if err := utils.GenerateAvatar(string(nameSlice[0]), avatarPath); err != nil {
+				return err
+			}
+		}
+		actressSql += fmt.Sprintf("('%s', '%s', '%v', '%v'), ", actress, avatarPath, time.Now().Local(), time.Now().Local())
+	}
+
+	// fmt.Printf("%+v\n", actress1)
+	// fmt.Printf("%+v\n", actress2)
+
+}
 
 // 遍历文件夹
 func TraverseFolders() {
@@ -20,8 +55,8 @@ func TraverseFolders() {
 }
 
 func recursive(dir string) {
-	var data = make(map[string]struct{})
 	var actress = make(map[string]struct{})
+	var data = make(map[string]struct{})
 
 	files, err := os.ReadDir(dir)
 	if err != nil {
@@ -33,19 +68,22 @@ func recursive(dir string) {
 			recursive(filepath.Join(dir, "/", file.Name()))
 		}
 		filename := file.Name()
+		i := 4
 		if filepath.Ext(filename) == ".jpg" {
 			arr := strings.Split(strings.Split(filename, ".")[0], "_")
 			actress[arr[len(arr)-1]] = struct{}{}
-			if len(arr[len(arr)-2]) < 20 && len(arr[len(arr)-2]) > 6 {
-				_, ok := actress[arr[len(arr)-2]]
-				if !ok {
-					data[arr[len(arr)-2]] = struct{}{}
+			if len(arr) > i {
+				if len(arr[len(arr)-i]) < 20 && len(arr[len(arr)-i]) > 6 {
+					_, ok := actress[arr[len(arr)-i]]
+					if !ok {
+						data[arr[len(arr)-i]] = struct{}{}
+					}
 				}
 			}
 		}
 	}
-	// WriteMapToFile("actress.json", &actress)
-	// WriteMapToFile("data.json", &data)
+	WriteMapToFile("actress.json", &actress)
+	WriteMapToFile("data.json", &data)
 }
 
 // 读取文件数据到 map
@@ -99,28 +137,33 @@ func ReadWriteFile() {
 
 // MoveFile 移动文件并修改文件名称
 func MoveFile(oldPath, newPath string) error {
-	if runtime.GOOS == "windows" { //跨卷移动
-		from, err := syscall.UTF16PtrFromString(oldPath)
-		if err != nil {
-			log.Fatalf("%v", err)
-			return err
-		}
-		to, err := syscall.UTF16PtrFromString(newPath)
-		if err != nil {
-			log.Fatalf("%v", err)
-			return err
-		}
-		//windows API
-		if err = syscall.MoveFile(from, to); err != nil {
-			log.Fatalf("%v", err)
-			return err
-		}
-	} else {
-		if err := os.Rename(oldPath, newPath); err != nil {
-			log.Fatalf("%v", err)
-			return err
-		}
+	if err := os.Rename(oldPath, newPath); err != nil {
+		log.Fatalf("%v", err)
+		return err
 	}
+
+	// if runtime.GOOS == "windows" { //跨卷移动
+	// 	from, err := syscall.UTF16PtrFromString(oldPath)
+	// 	if err != nil {
+	// 		log.Fatalf("%v", err)
+	// 		return err
+	// 	}
+	// 	to, err := syscall.UTF16PtrFromString(newPath)
+	// 	if err != nil {
+	// 		log.Fatalf("%v", err)
+	// 		return err
+	// 	}
+	// 	//windows API
+	// 	if err = syscall.MoveFile(from, to); err != nil {
+	// 		log.Fatalf("%v", err)
+	// 		return err
+	// 	}
+	// } else {
+	// 	if err := os.Rename(oldPath, newPath); err != nil {
+	// 		log.Fatalf("%v", err)
+	// 		return err
+	// 	}
+	// }
 	return nil
 }
 
