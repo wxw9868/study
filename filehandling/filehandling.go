@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 func MergeData() {
@@ -24,24 +23,6 @@ func MergeData() {
 	// 	}
 	// }
 	// WriteMapToFile("MergeData.json", &actress1)
-
-	var data = make(map[string]struct{})
-	ReadFileToMap("MergeData.json", &data)
-
-	var actressSql = "INSERT OR REPLACE INTO video_Actress (actress, avatar, CreatedAt, UpdatedAt) VALUES "
-
-	for actress, _ := range data {
-		avatarPath := avatarDir + "/" + actress + ".png"
-
-		_, err := os.Stat(avatarPath)
-		if os.IsNotExist(err) {
-			nameSlice := []rune(actress)
-			if err := utils.GenerateAvatar(string(nameSlice[0]), avatarPath); err != nil {
-				return err
-			}
-		}
-		actressSql += fmt.Sprintf("('%s', '%s', '%v', '%v'), ", actress, avatarPath, time.Now().Local(), time.Now().Local())
-	}
 
 	// fmt.Printf("%+v\n", actress1)
 	// fmt.Printf("%+v\n", actress2)
