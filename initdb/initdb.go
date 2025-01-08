@@ -63,10 +63,8 @@ func InitDB() {
 	err = db.AutoMigrate(
 		&Ad{},
 		&Article{},
-		&Certification{},
 		&Coupon{},
 		&CouponLog{},
-		&Education{},
 		&Job{},
 		&JobCategory{},
 		&JobDeliver{},
@@ -77,9 +75,11 @@ func InitDB() {
 		&Region{},
 		&Settings{},
 		&User{},
+		&UserLoginLog{},
 		&UserBalance{},
 		&UserBalanceLog{},
-		&Userinfo{},
+		&UserCertification{},
+		&University{},
 	)
 	if err != nil {
 		log.Fatal(err)
