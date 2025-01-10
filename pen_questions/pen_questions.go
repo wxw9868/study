@@ -9,6 +9,26 @@ import (
 	"time"
 )
 
+func Main() {
+	s := [3]int{1, 2, 3}
+	a := s[:0]
+	b := s[:2]
+	c := s[1:2:cap(s)]
+
+	fmt.Println("---a---")
+	fmt.Println(a)
+	fmt.Println("len:", len(a))
+	fmt.Println("cap:", cap(a))
+	fmt.Println("---b---")
+	fmt.Println(b)
+	fmt.Println("len:", len(b))
+	fmt.Println("cap:", cap(b))
+	fmt.Println("---c---")
+	fmt.Println(c)
+	fmt.Println("len:", len(c))
+	fmt.Println("cap:", cap(c))
+}
+
 // IfPowerOfTwo
 // 判断一个数是不是2的幂数
 // 例如：8是，6不是

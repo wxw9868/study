@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+func TestMain(t *testing.T) {
+	Main()
+}
+
 func TestIfPowerOfTwo(t *testing.T) {
 	i := 32
 	ok, power := IfPowerOfTwo(i)
