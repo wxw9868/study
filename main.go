@@ -14,13 +14,6 @@ import (
 )
 
 func main() {
-	v := []int{1, 2, 3}
-	for i := range v {
-		v = append(v, i)
-	}
-	fmt.Printf("%+v\n", v)
-	return
-
 	// // 假设你已经有了一个JSON格式的字符串
 	// jsonString := `{"name":"John","age":30,"city":"New York"}`
 

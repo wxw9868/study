@@ -35,7 +35,7 @@ func main() {
 	go BatchDownloadImages(urls, wg)
 
 	wg.Wait()
-	fmt.Printf("SUCCESS, elapsed: %v\n", time.Since(start))
+	log.Printf("SUCCESS, elapsed: %v\n", time.Since(start))
 
 }
 
@@ -44,7 +44,7 @@ func Work(urls chan string, wg *sync.WaitGroup) {
 	for url := range urls {
 		err := DownloadImage(url, savePath, "")
 		if err != nil {
-			fmt.Printf("Image download failed: %s, error: %s\n", url, err)
+			log.Printf("Image download failed: %s, error: %s\n", url, err)
 		}
 	}
 }
@@ -71,7 +71,6 @@ func BatchDownloadImages(urls chan string, wg *sync.WaitGroup) {
 
 		urls <- link
 		atomic.AddUint32(&results, 1)
-		// fmt.Printf("Link found: %s -> %s\n", link, filepath.Ext(dataSrc))
 	})
 
 	c.OnRequest(func(r *colly.Request) {
@@ -104,7 +103,7 @@ func BatchDownloadImages(urls chan string, wg *sync.WaitGroup) {
 	}
 
 	close(urls)
-	fmt.Printf("wrong Queue implementation: items = %d, requests = %d, success = %d, failure = %d, results = %d\n", items, requests, success, failure, results)
+	log.Printf("wrong Queue implementation: items = %d, requests = %d, success = %d, failure = %d, results = %d\n", items, requests, success, failure, results)
 }
 
 func DownloadImage(url, savePath, saveFile string) error {
