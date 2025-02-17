@@ -1,3 +1,11 @@
+<!--
+ * @Author: wxw9868@163.com
+ * @Date: 2024-06-04 16:45:18
+ * @LastEditTime: 2025-02-06 11:23:49
+ * @LastEditors: wxw9868@163.com
+ * @FilePath: /study/README.md
+ * @Description: 灵活就业服务平台
+-->
 # study
 
 - [手把手教你用 Go 语言实现缓存系统](cache/README.md)
@@ -15,4 +23,3 @@ library 第三方库
 practise 练习  
 design_mode 设计模式  
 pen_questions 笔试题
-

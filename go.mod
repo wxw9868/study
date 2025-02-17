@@ -17,7 +17,6 @@ require (
 	github.com/thedevsaddam/gojsonq/v2 v2.5.2
 	github.com/u2takey/ffmpeg-go v0.5.0
 	github.com/zeromicro/go-zero v1.7.5
-	golang.org/x/mobile v0.0.0-20240520174638-fa72addaaa1b
 	google.golang.org/grpc v1.65.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
@@ -149,7 +148,6 @@ require (
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	golang.org/x/exp/shiny v0.0.0-20240531132922-fd00a4e0eefc // indirect
 	golang.org/x/image v0.16.0 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect

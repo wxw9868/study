@@ -1,10 +1,10 @@
 /*
- * @Author: wxw9868 wxw9868@163.com
+ * @Author: wxw9868@163.com
  * @Date: 2025-01-15 14:35:40
- * @LastEditors: wxw9868 wxw9868@163.com
- * @LastEditTime: 2025-01-15 14:35:51
+ * @LastEditTime: 2025-02-07 10:17:55
+ * @LastEditors: wxw9868@163.com
  * @FilePath: /study/initdb/job-user.go
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 灵活就业服务平台
  */
 package initdb
 
@@ -13,11 +13,11 @@ import "time"
 // User 用户表
 type User struct {
 	GormModel
+	Avatar    string `gorm:"column:avatar;type:varchar(255);comment:头像"`
 	Username  string `gorm:"column:username;type:varchar(120);uniqueIndex;comment:用户名"`
 	Password  string `gorm:"column:password;type:varchar(255);comment:密码"`
 	Mobile    string `gorm:"column:mobile;type:varchar(20);uniqueIndex;comment:手机号"`
 	Email     string `gorm:"column:email;type:varchar(20);comment:邮箱"`
-	Avatar    string `gorm:"column:avatar;type:varchar(255);comment:头像"`
 	Usertype  int8   `gorm:"column:usertype;not null;size:1;default:0;comment:用户类型: 1普通用户 2企业用户 3管理员"`
 	Sex       int8   `gorm:"column:sex;not null;size:1;default:0;comment:性别: 0保密 1男 2女"`
 	WechatId  string `gorm:"column:wechat_id;type:varchar(60);comment:微信号"`
