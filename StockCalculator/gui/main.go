@@ -140,9 +140,6 @@ func createThemeSettings(a fyne.App, w fyne.Window) fyne.CanvasObject {
 	return container.NewPadded(settingsForm)
 }
 
-// go run gui/main.go
-// go run -tags mobile gui/main.go
-// fyne package -os android -appID com.wxw9868.stockcalculator -name "Stock Calculator" -icon stock.png
 func main() {
 	// 创建Fyne应用并设置主题
 	a := app.New()
@@ -324,14 +321,19 @@ func main() {
 	})
 
 	// 创建按钮容器容器，添加设置按钮：
-	// 创建按钮容器
-	buttonContainer := container.NewHBox(
-		settingsButton,
-		layout.NewSpacer(),
-		exampleButton,
-		resetButton,
-		calculateButton,
-		layout.NewSpacer(),
+	// 创建按钮容器，确保按钮宽度与内容一致
+	buttonContainer := container.NewVBox(
+		container.NewHBox(
+			layout.NewSpacer(),
+			settingsButton,
+			layout.NewSpacer(),
+			exampleButton,
+			layout.NewSpacer(),
+			resetButton,
+			layout.NewSpacer(),
+			calculateButton,
+			layout.NewSpacer(),
+		),
 	)
 
 	// 创建分隔线
@@ -387,13 +389,26 @@ func main() {
 		titleText.TextSize = 22
 		subtitleText.TextSize = 14
 
+		// 为移动设备创建更合理的按钮布局，确保按钮之间有足够间距
+		mobileButtonContainer := container.NewHBox(
+			layout.NewSpacer(),
+			settingsButton,
+			container.NewPadded(layout.NewSpacer()), // 添加额外间距
+			exampleButton,
+			container.NewPadded(layout.NewSpacer()), // 添加额外间距
+			resetButton,
+			container.NewPadded(layout.NewSpacer()), // 添加额外间距
+			calculateButton,
+			layout.NewSpacer(),
+		)
+
 		// 创建更紧凑的表单布局
 		compactForm := container.NewVBox(
 			container.NewGridWithColumns(2, rateLabel, rateEntry),
 			container.NewGridWithColumns(2, buyPriceLabel, buyPriceEntry),
 			container.NewGridWithColumns(2, sellPriceLabel, sellPriceEntry),
 			container.NewGridWithColumns(2, countLabel, countEntry),
-			container.NewPadded(buttonContainer),
+			container.NewPadded(mobileButtonContainer), // 使用移动端专用按钮容器
 		)
 
 		// 替换左侧面板内容为更紧凑的表单
@@ -518,8 +533,10 @@ func createModernPanel(title, subtitle string, content fyne.CanvasObject) fyne.C
 		contentWithPadding,
 	)
 
-	// 使用Card容器，它会自动适应主题
-	return widget.NewCard("", "", panelContent)
+	// 使用自定义容器替代Card，以避免不必要的边框
+	return container.NewPadded(
+		container.NewVBox(panelContent),
+	)
 }
 
 // 创建移动设备专用的紧凑面板
@@ -542,6 +559,8 @@ func createMobilePanel(title string, content fyne.CanvasObject) fyne.CanvasObjec
 		contentWithPadding,
 	)
 
-	// 使用Card容器，它会自动适应主题
-	return widget.NewCard("", "", panelContent)
+	// 使用自定义容器替代Card，以避免不必要的边框
+	return container.NewPadded(
+		container.NewVBox(panelContent),
+	)
 }
