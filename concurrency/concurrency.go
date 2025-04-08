@@ -11,11 +11,127 @@ import (
 	"time"
 )
 
+// go如何用两个协程交替打印出123456
+func PrintOddAndEven() {
+	signalCh := make(chan struct{})
+	oddCh := make(chan int)
+	evenCh := make(chan int)
+	wg := new(sync.WaitGroup)
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		timer := time.NewTimer(time.Second * 1)
+		i := 0
+		for {
+			select {
+			case <-timer.C:
+				fmt.Printf("even: %s\n", "PUT END")
+				signalCh <- struct{}{}
+				return
+			default:
+				time.Sleep(time.Millisecond * 100)
+				i++
+				if i%2 != 0 {
+					oddCh <- i
+				} else {
+					evenCh <- i
+				}
+			}
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		for {
+			select {
+			case odd, ok := <-oddCh: // 奇数
+				if ok {
+					fmt.Printf("odd: %d\n", odd)
+				}
+			case even, ok := <-evenCh: // 偶数
+				if ok {
+					fmt.Printf("even: %d\n", even)
+				}
+			case <-signalCh:
+				fmt.Printf("even: %s\n", "OUT END")
+				return
+			}
+		}
+	}()
+	wg.Wait()
+}
+
+// WorkDone 启动 2个goroutine 2秒后取消， 第一个协程1秒执行完，第二个协程3秒执行完。
+func WorkDone() {
+	doWork := func(done <-chan any, strings <-chan string) <-chan any {
+		completed := make(chan any)
+		go func() {
+			defer fmt.Println("doWork exited.")
+			defer close(completed)
+			for {
+				select {
+				case s := <-strings:
+					// Do something interesting
+					fmt.Println(s)
+				case <-done:
+					return
+				}
+			}
+		}()
+		return completed
+	}
+
+	done := make(chan any)
+	terminated := doWork(done, nil)
+
+	go func() {
+		// Cancel the operation after 1 second.
+		time.Sleep(1 * time.Second)
+		fmt.Println("Canceling doWork goroutine...")
+		close(done)
+	}()
+
+	<-terminated
+	fmt.Println("Done.")
+}
+
+// TimeoutCloseTask 超时关闭channel并退出程序
+func TimeoutCloseTask() {
+	jobs := make(chan int)
+	timeout := make(chan bool)
+	var wg sync.WaitGroup
+	go func() {
+		time.Sleep(time.Second * 3)
+		timeout <- true
+	}()
+	go func() {
+		for i := 0; ; i++ {
+			select {
+			case <-timeout:
+				close(jobs)
+				return
+			default:
+				jobs <- i
+				fmt.Println("produce:", i)
+			}
+		}
+	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for i := range jobs {
+			fmt.Println("consume:", i)
+		}
+	}()
+	wg.Wait()
+}
+
 // TimeoutOnCloseChannel 超时关闭channel并退出程序
 func TimeoutOnCloseChannel() {
 	wg := sync.WaitGroup{}
 	c := make(chan struct{})
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		wg.Add(1)
 		go func(num int, close <-chan struct{}) {
 			defer wg.Done()
@@ -76,7 +192,7 @@ func MutexAndGoroutine() {
 func CheckTheNumberOfGoroutines() {
 	gonum := runtime.NumGoroutine()
 	fmt.Printf("NumGoroutine: %d\n", gonum)
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		go func() {
 			fmt.Println(i)
 			time.Sleep(time.Second)
@@ -93,7 +209,7 @@ func CheckTheNumberOfGoroutines() {
 func UseChannelsToControlOutputOrder() {
 	var wg = sync.WaitGroup{}
 	var ch = make(chan struct{}, 1)
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		wg.Add(1)
 		go func(ch chan struct{}, i int) {
 			defer wg.Done()
@@ -262,7 +378,7 @@ func ManuallyExitTask() {
 
 	go func() {
 		// 工作内容
-		for i := 0; i < 5; i++ {
+		for i := range 5 {
 			workString <- "work " + strconv.Itoa(i)
 		}
 
@@ -285,7 +401,7 @@ func ReusingGoroutine() {
 	// data := new(sync.Map)
 	// data := make([]int, 0)
 
-	for i := 0; i < runtime.NumCPU(); i++ {
+	for i := range runtime.NumCPU() {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
@@ -308,7 +424,7 @@ func ReusingGoroutine() {
 	}
 
 	go func() {
-		for i := 0; i < 10; i++ {
+		for i := range 10 {
 			ch <- i
 		}
 		close(ch)
@@ -325,7 +441,7 @@ func UsingMutexLock() {
 	var mu sync.Mutex
 	var data = make([]int, 0)
 
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
@@ -384,13 +500,13 @@ func UsingReadWriteLocks() {
 		rw.Unlock()
 		ch <- struct{}{}
 	}
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		go read(i, ch)
 	}
-	for i := 0; i < 5; i++ {
+	for i := range 5 {
 		go write(i, ch)
 	}
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		<-ch
 	}
 }
@@ -399,7 +515,7 @@ func UsingReadWriteLocks() {
 func AtomicOperations() {
 	var wg sync.WaitGroup
 	ans := int64(0)
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		wg.Add(1)
 		go func(wg *sync.WaitGroup, i *int64) {
 			defer wg.Done()

@@ -1,8 +1,9 @@
 package algorithm
 
 import (
-	"github.com/wxw9868/study/utils"
 	"testing"
+
+	"github.com/wxw9868/study/utils"
 )
 
 func TestBubbleSort(t *testing.T) {

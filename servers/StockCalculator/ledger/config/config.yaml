@@ -1,0 +1,21 @@
+#系统配置
+system:
+  host: 127.0.0.1
+  port: 9990
+  #配置https证书
+  cert:
+  key:
+
+#数据库配置
+database:
+  # db_path: D:/database/sqlite/video.db
+  db_path: /Users/v_weixiongwei/go/src/private-video/database/sqlite/video.db
+
+
+
+#Redis配置
+redis:
+  host: 47.94.226.115
+  port: 6379
+  password: ''
+  db: 0

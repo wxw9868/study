@@ -9,6 +9,29 @@ import (
 
 var wg sync.WaitGroup
 
+func StudyContext() {
+	ctx := context.WithValue(context.Background(), "key", "value")
+	ctx, cancel := context.WithTimeout(ctx, time.Second)
+	wg.Add(1)
+	go func(ctx context.Context, wg *sync.WaitGroup) {
+		defer wg.Done()
+	E:
+		for {
+			select {
+			case <-ctx.Done():
+				fmt.Printf("%s\n", "coroutine exit")
+				break E
+			default:
+				value := ctx.Value("key")
+				fmt.Println(value)
+				time.Sleep(time.Millisecond * 100)
+			}
+		}
+	}(ctx, &wg)
+	wg.Wait()
+	cancel()
+}
+
 // GoDone 启动 2个goroutine 2秒后取消， 第一个协程1秒执行完，第二个协程3秒执行完。
 func GoDone() {
 	wg.Add(2)
