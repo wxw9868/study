@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
+func TestPoint(t *testing.T) {
+	Point()
+}
+
 func TestMain(t *testing.T) {
 	Main()
 }

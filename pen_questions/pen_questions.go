@@ -9,6 +9,21 @@ import (
 	"time"
 )
 
+type Test struct {
+	name string
+}
+
+func (t *Test) Point() { // t 为指针
+	fmt.Println(t.name)
+}
+
+func Point() {
+	ts := []Test{{"a"}, {"b"}, {"c"}}
+	for _, t := range ts {
+		defer t.Point() //输出 c c c
+	}
+}
+
 func Main() {
 	s := [3]int{1, 2, 3}
 	a := s[:0]

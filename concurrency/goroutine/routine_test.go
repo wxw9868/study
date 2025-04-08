@@ -2,6 +2,10 @@ package routine
 
 import "testing"
 
+func TestStudyContext(t *testing.T) {
+	StudyContext()
+}
+
 func TestGoDone(t *testing.T) {
 	GoDone()
 }

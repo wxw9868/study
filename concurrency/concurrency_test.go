@@ -5,6 +5,9 @@ import (
 )
 
 func TestMain(t *testing.T) {
+	// utils.MethodRuntime(PrintOddAndEven)
+	// utils.MethodRuntime(WorkDone)
+	// utils.MethodRuntime(TimeoutCloseTask)
 	// utils.MethodRuntime(TimeoutOnCloseChannel)
 	// utils.MethodRuntime(MutexAndGoroutine)
 	// utils.MethodRuntime(CheckTheNumberOfGoroutines)
