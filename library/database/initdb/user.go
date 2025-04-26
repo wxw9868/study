@@ -5,18 +5,19 @@ import "time"
 // User 用户表
 type User struct {
 	GormModel
-	Avatar    string `gorm:"column:avatar;type:varchar(255);comment:头像"`
-	Username  string `gorm:"column:username;type:varchar(120);uniqueIndex;comment:用户名"`
-	Password  string `gorm:"column:password;type:varchar(255);comment:密码"`
-	Mobile    string `gorm:"column:mobile;type:varchar(20);uniqueIndex;comment:手机号"`
-	Email     string `gorm:"column:email;type:varchar(20);comment:邮箱"`
-	Usertype  int8   `gorm:"column:usertype;not null;size:1;default:0;comment:用户类型: 1普通用户 2企业用户 3管理员"`
-	Sex       int8   `gorm:"column:sex;not null;size:1;default:0;comment:性别: 0保密 1男 2女"`
-	WechatId  string `gorm:"column:wechat_id;type:varchar(60);comment:微信号"`
-	QQ        string `gorm:"column:qq;type:varchar(60);comment:QQ"`
-	Education int8   `gorm:"column:education;size:1;comment:学历: 1小学 2初中 3高中 4大专 5本科 6研究生"`
-	Degree    int8   `gorm:"column:degree;size:1;comment:学位: 1学士 2硕士 3博士"`
-	Intro     string `gorm:"column:intro;comment:简介"`
+	Avatar    string    `gorm:"column:avatar;type:varchar(255);comment:头像"`
+	Username  string    `gorm:"column:username;type:varchar(120);uniqueIndex;comment:用户名"`
+	Password  string    `gorm:"column:password;type:varchar(255);comment:密码"`
+	Mobile    string    `gorm:"column:mobile;type:varchar(20);uniqueIndex;comment:手机号"`
+	Email     string    `gorm:"column:email;type:varchar(20);comment:邮箱"`
+	Usertype  int8      `gorm:"column:usertype;not null;size:1;default:0;comment:用户类型: 1普通用户 2企业用户 3管理员"`
+	Sex       int8      `gorm:"column:sex;not null;size:1;default:0;comment:性别: 0保密 1男 2女"`
+	Birthday  time.Time `gorm:"column:birthday;comment:生日"`
+	WechatId  string    `gorm:"column:wechat_id;type:varchar(60);comment:微信号"`
+	QQ        string    `gorm:"column:qq;type:varchar(60);comment:QQ"`
+	Education int8      `gorm:"column:education;size:1;comment:学历: 1小学 2初中 3高中 4大专 5本科 6研究生"`
+	Degree    int8      `gorm:"column:degree;size:1;comment:学位: 1学士 2硕士 3博士"`
+	Intro     string    `gorm:"column:intro;comment:简介"`
 }
 
 // UserLoginLog 用户登陆日志表
@@ -28,7 +29,7 @@ type UserLoginLog struct {
 	LoginLocation string    `gorm:"comment:登录地点" json:"loginLocation"`
 	Browser       string    `gorm:"comment:浏览器类型" json:"browser"`
 	Os            string    `gorm:"comment:操作系统" json:"os"`
-	Status        int       `gorm:"comment:登录状态(1成功 2失败)" json:"status"`
+	Status        int8      `gorm:"comment:登录状态(1成功 2失败)" json:"status"`
 	Msg           string    `gorm:"comment:提示消息" json:"msg"`
 	LoginTime     time.Time `gorm:"comment:登录时间" json:"loginTime"`
 	Module        string    `gorm:"comment:登录模块" json:"module"`
