@@ -1,11 +1,3 @@
-/*
- * @Author: wxw9868@163.com
- * @Date: 2025-01-15 14:35:40
- * @LastEditTime: 2025-02-07 10:17:55
- * @LastEditors: wxw9868@163.com
- * @FilePath: /study/initdb/job-user.go
- * @Description: 灵活就业服务平台
- */
 package initdb
 
 import "time"
@@ -23,7 +15,7 @@ type User struct {
 	WechatId  string `gorm:"column:wechat_id;type:varchar(60);comment:微信号"`
 	QQ        string `gorm:"column:qq;type:varchar(60);comment:QQ"`
 	Education int8   `gorm:"column:education;size:1;comment:学历: 1小学 2初中 3高中 4大专 5本科 6研究生"`
-	Degree    int8   `gorm:"column:degree;size:1;comment:学历: 1学士 2硕士 3博士"`
+	Degree    int8   `gorm:"column:degree;size:1;comment:学位: 1学士 2硕士 3博士"`
 	Intro     string `gorm:"column:intro;comment:简介"`
 }
 
@@ -46,16 +38,16 @@ type UserLoginLog struct {
 type UserBalance struct {
 	GormModel
 	UserID    uint    `gorm:"column:user_id;not null;comment:用户ID"`
-	Balance   float64 `gorm:"column:balance;type:decimal(10,2);not null;default:0;comment:账户余额"` // 账户余额
-	GiveMoney float64 `gorm:"column:give_money;type:decimal(10,2);default:0;comment:满赠的额度"`      // 满赠的额度
+	Balance   float64 `gorm:"column:balance;type:decimal(10,2);not null;default:0;comment:账户余额"`
+	GiveMoney float64 `gorm:"column:give_money;type:decimal(10,2);default:0;comment:满赠额度"`
 }
 
 // UserBalanceLog 用户余额变动日志表
 type UserBalanceLog struct {
 	GormModel
 	UserID        uint      `gorm:"column:user_id;not null;comment:用户ID"`
-	Amount        float64   `gorm:"column:amount;type:decimal(10,2);not null;comment:金额"`
 	Action        int8      `gorm:"column:action;not null;size:1;comment:行为: 1充值 2消费 3推广 4提现 5岗位扣费"`
+	Amount        float64   `gorm:"column:amount;type:decimal(10,2);not null;comment:金额"`
 	PaymentMethod string    `gorm:"column:payment_method;not null;comment:支付方式: alipay支付宝支付 wechatpay微信支付"`
 	PaymentStatus int8      `gorm:"column:payment_status;not null;size:1;default:0;comment:支付状态: 1已支付 2待支付 3支付失败"`
 	PaymentTime   time.Time `gorm:"column:payment_time;not null;comment:支付时间"`

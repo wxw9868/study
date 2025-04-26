@@ -4,10 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/wxw9868/study/quickstart/greet/api/internal/config"
-	"github.com/wxw9868/study/quickstart/greet/api/internal/handler"
-	"github.com/wxw9868/study/quickstart/greet/api/internal/svc"
-
+	"github.com/wxw9868/study/library/quickstart/greet/api/internal/config"
+	"github.com/wxw9868/study/library/quickstart/greet/api/internal/handler"
+	"github.com/wxw9868/study/library/quickstart/greet/api/internal/svc"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )

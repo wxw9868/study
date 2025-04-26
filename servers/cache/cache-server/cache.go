@@ -3,7 +3,7 @@ package cache_server
 import (
 	"time"
 
-	"github.com/wxw9868/study/cache/cache"
+	"github.com/wxw9868/study/servers/cache/cache"
 )
 
 type cacheServer struct {

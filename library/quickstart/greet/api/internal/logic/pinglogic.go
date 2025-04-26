@@ -5,9 +5,9 @@ import (
 
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"github.com/wxw9868/study/quickstart/greet/api/internal/svc"
-	"github.com/wxw9868/study/quickstart/greet/api/internal/types"
-	"github.com/wxw9868/study/quickstart/greet/rpc/greet"
+	"github.com/wxw9868/study/library/quickstart/greet/api/internal/svc"
+	"github.com/wxw9868/study/library/quickstart/greet/api/internal/types"
+	"github.com/wxw9868/study/library/quickstart/greet/rpc/greet"
 )
 
 type PingLogic struct {

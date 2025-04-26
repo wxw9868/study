@@ -7,8 +7,7 @@ package greet
 import (
 	"context"
 
-	"github.com/wxw9868/study/quickstart/greet/rpc/pb"
-
+	"github.com/wxw9868/study/library/quickstart/greet/rpc/pb"
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
