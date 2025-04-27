@@ -3,9 +3,8 @@ package logic
 import (
 	"context"
 
-	"github.com/wxw9868/study/quickstart/greet/rpc/internal/svc"
-	"github.com/wxw9868/study/quickstart/greet/rpc/pb"
-
+	"github.com/wxw9868/study/library/quickstart/greet/rpc/internal/svc"
+	"github.com/wxw9868/study/library/quickstart/greet/rpc/pb"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

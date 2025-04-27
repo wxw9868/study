@@ -1,7 +1,7 @@
 package main
 
 import (
-	cache_server "github.com/wxw9868/study/cache/cache-server"
+	cache_server "github.com/wxw9868/study/servers/cache/cache-server"
 )
 
 func main() {

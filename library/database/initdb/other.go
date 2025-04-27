@@ -1,11 +1,3 @@
-/*
- * @Author: wxw9868 wxw9868@163.com
- * @Date: 2025-01-02 16:08:43
- * @LastEditors: wxw9868 wxw9868@163.com
- * @LastEditTime: 2025-01-15 14:37:36
- * @FilePath: /study/initdb/part_time_job.go
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 package initdb
 
 import (
@@ -75,12 +67,15 @@ type Article struct {
 // Coupon 优惠券表
 type Coupon struct {
 	GormModel
-	Name       string  `gorm:"column:name;type:varchar(255);comment:优惠券名称"`                                // 优惠券名称
-	Level      int16   `gorm:"column:level;type:smallint(6);comment:优惠券等级"`                                // 优惠券等级
-	FullAmount float64 `gorm:"column:full_amount;type:decimal(10,2);not null;comment:金额"`                  // 金额
-	SendAmount float64 `gorm:"column:send_amount;type:decimal(10,2);not null;comment:满多少金额送多少: 例如满100送10"` // 满多少金额送多少：例如满100送10
-	IsUse      int8    `gorm:"column:is_use;not null;default:1;comment:是否使用: 1已使用 2没使用"`                   // 是否使用：1已使用；2没使用
-	Desc       string  `gorm:"column:desc;type:varchar(255);comment:优惠券介绍"`                                // 优惠券介绍
+	Name       string    `gorm:"column:name;type:varchar(255);comment:优惠券名称"`
+	Type       int8      `gorm:"column:type;size:1;not null;default:0;comment:优惠券类型: 1满减券 2折扣券"`             // 是否使用：1已使用；2没使用                                // 优惠券名称
+	Level      int16     `gorm:"column:level;type:smallint(6);comment:优惠券等级"`                                // 优惠券等级
+	FullAmount float64   `gorm:"column:full_amount;type:decimal(10,2);not null;comment:金额"`                  // 金额
+	SendAmount float64   `gorm:"column:send_amount;type:decimal(10,2);not null;comment:满多少金额送多少: 例如满100送10"` // 满多少金额送多少：例如满100送10
+	StartTime  time.Time `gorm:"column:start_time;not null;comment:开始时间·"`                                   // 开始时间·
+	EndTime    time.Time `gorm:"column:end_time;not null;comment:结束时间"`
+	Status     int8      `gorm:"column:status;size:1;not null;default:1;comment:状态: 1正常 2已过期"` // 是否使用：1已使用；2没使用
+	Desc       string    `gorm:"column:desc;type:varchar(255);comment:优惠券介绍"`                  // 优惠券介绍
 }
 
 // CouponLog 优惠券使用记录表

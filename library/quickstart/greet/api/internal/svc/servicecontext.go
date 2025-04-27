@@ -1,9 +1,9 @@
 package svc
 
 import (
-	"github.com/wxw9868/study/quickstart/greet/api/internal/config"
+	"github.com/wxw9868/study/library/quickstart/greet/api/internal/config"
+	"github.com/wxw9868/study/library/quickstart/greet/rpc/greet"
 	"github.com/zeromicro/go-zero/zrpc"
-	"github.com/wxw9868/study/quickstart/greet/rpc/greet"
 )
 
 type ServiceContext struct {
