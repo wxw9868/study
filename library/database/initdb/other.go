@@ -17,9 +17,9 @@ type GormModel struct {
 // Settings 系统设置表
 type Settings struct {
 	GormModel
-	WechatShow      int8    `gorm:"column:wechat_show;not null;default:2;comment:微信显示: 1展示 2隐藏"`            // 微信显示：1展示；2隐藏
-	Price           float64 `gorm:"column:price;type:decimal(10,2);not null;default:0;comment:投递一次岗位的收费价格"` // 投递一次岗位的收费价格
-	CustomerService string  `gorm:"column:customer_service;comment:客户服务"`                                   // 客户服务
+	WechatShow      int8    `gorm:"column:wechat_show;not null;default:2;comment:微信显示: 1展示 2隐藏"`
+	Price           float64 `gorm:"column:price;type:decimal(10,2);not null;default:0;comment:投递一次岗位的收费价格"`
+	CustomerService string  `gorm:"column:customer_service;comment:客户服务"`
 }
 
 // University 全国高等学校名单表
@@ -45,37 +45,39 @@ type Region struct {
 // Ad 广告表
 type Ad struct {
 	GormModel
-	AdName    string    `gorm:"column:ad_name;type:varchar(255);not null;comment:广告名称"`   // 广告名称
-	AdURL     string    `gorm:"column:ad_url;type:varchar(255);not null;comment:链接地址"`    // 链接地址
-	ImgURL    string    `gorm:"column:img_url;type:varchar(255);not null;comment:图片地址"`   // 图片地址
-	StartTime time.Time `gorm:"column:start_time;not null;comment:开始时间·"`                 // 开始时间·
-	EndTime   time.Time `gorm:"column:end_time;not null;comment:结束时间"`                    // 结束时间
-	IsShow    int8      `gorm:"column:is_show;not null;default:1;comment:是否显示: 1显示 2不显示"` // 是否显示：1显示；2不显示
-	IsFree    int8      `gorm:"column:is_free;not null;comment:是否免费: 1是 2不是"`             // 是否免费：1是；2不是
-	Sort      int       `gorm:"column:sort;not null;default:0;comment:排序"`                // 排序
-	AdType    int8      `gorm:"column:ad_type;not null;comment:广告类型: 1banner广告 2普通广告"`    // 广告类型：1banner广告；2普通广告
+	Type      int8      `gorm:"column:type;size:1;not null;comment:广告类型: 1banner广告 2普通广告"`
+	Name      string    `gorm:"column:name;type:varchar(90);not null;comment:广告名称"`
+	URL       string    `gorm:"column:url;type:varchar(255);not null;comment:链接地址"`
+	Image     string    `gorm:"column:image;type:varchar(255);not null;comment:图片地址"`
+	StartTime time.Time `gorm:"column:start_time;not null;comment:开始时间·"`
+	EndTime   time.Time `gorm:"column:end_time;not null;comment:结束时间"`
+	IsShow    int8      `gorm:"column:is_show;size:1;not null;default:1;comment:是否显示: 1显示 2隐藏"`
+	IsFree    int8      `gorm:"column:is_free;size:1;not null;comment:是否免费: 1是 2不是"`
+	Sorting   int       `gorm:"column:sorting;not null;default:0;comment:排序"`
 }
 
 // Article 文章表
 type Article struct {
 	GormModel
-	Title   string `gorm:"column:title;type:varchar(255);not null;comment:文章标题"` // 标题
+	Title   string `gorm:"column:title;type:varchar(255);not null;comment:文章标题"`
 	Author  string `gorm:"column:author;type:varchar(255);not null;comment:文章作者"`
-	Content string `gorm:"column:content;type:longtext;not null;comment:文章内容"` // 内容
+	Content string `gorm:"column:content;type:longtext;not null;comment:文章内容"`
+	IsShow  int8   `gorm:"column:is_show;size:1;not null;default:1;comment:是否显示: 1显示 2隐藏"`
+	IsTop   int8   `gorm:"column:is_top;size:1;not null;default:2;comment:是否置顶: 1置顶 2取消"`
 }
 
 // Coupon 优惠券表
 type Coupon struct {
 	GormModel
+	Type       int8      `gorm:"column:type;size:1;not null;default:0;comment:优惠券类型: 1满减券 2折扣券"`
 	Name       string    `gorm:"column:name;type:varchar(255);comment:优惠券名称"`
-	Type       int8      `gorm:"column:type;size:1;not null;default:0;comment:优惠券类型: 1满减券 2折扣券"`             // 是否使用：1已使用；2没使用                                // 优惠券名称
-	Level      int16     `gorm:"column:level;type:smallint(6);comment:优惠券等级"`                                // 优惠券等级
-	FullAmount float64   `gorm:"column:full_amount;type:decimal(10,2);not null;comment:金额"`                  // 金额
-	SendAmount float64   `gorm:"column:send_amount;type:decimal(10,2);not null;comment:满多少金额送多少: 例如满100送10"` // 满多少金额送多少：例如满100送10
-	StartTime  time.Time `gorm:"column:start_time;not null;comment:开始时间·"`                                   // 开始时间·
+	Level      int16     `gorm:"column:level;type:smallint(6);comment:优惠券等级"`
+	FullAmount float64   `gorm:"column:full_amount;type:decimal(10,2);not null;comment:金额"`
+	SendAmount float64   `gorm:"column:send_amount;type:decimal(10,2);not null;comment:满多少金额送多少: 例如满100送10"`
+	StartTime  time.Time `gorm:"column:start_time;not null;comment:开始时间·"`
 	EndTime    time.Time `gorm:"column:end_time;not null;comment:结束时间"`
-	Status     int8      `gorm:"column:status;size:1;not null;default:1;comment:状态: 1正常 2已过期"` // 是否使用：1已使用；2没使用
-	Desc       string    `gorm:"column:desc;type:varchar(255);comment:优惠券介绍"`                  // 优惠券介绍
+	Status     int8      `gorm:"column:status;size:1;not null;default:1;comment:状态: 1正常 2已过期"`
+	Desc       string    `gorm:"column:desc;type:varchar(255);comment:优惠券介绍"`
 }
 
 // CouponLog 优惠券使用记录表
