@@ -26,7 +26,7 @@ func main() {
 	var wg = new(sync.WaitGroup)
 	var urls = make(chan string)
 
-	for i := 0; i < runtime.NumCPU(); i++ {
+	for range runtime.NumCPU() {
 		wg.Add(1)
 		go Work(urls, wg)
 	}

@@ -2,10 +2,12 @@ package goquery
 
 import (
 	"encoding/json"
-	"github.com/PuerkitoBio/goquery"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 type Data struct {
@@ -21,7 +23,7 @@ type Data struct {
 
 func GoQuery() {
 	// Request the HTML page.
-	res, err := http.Get("http://58.129.246.60:8888/web/specifyReportedInfo/specify_reported_info.html")
+	res, err := http.Get("https://hudong.moe.gov.cn/school/wcmdata/getDataIndex.jsp?listid=10000101&page=7&keyword=")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,6 +37,8 @@ func GoQuery() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(doc.Html())
+	return
 
 	table := doc.Find("#AutoNumber4")
 
