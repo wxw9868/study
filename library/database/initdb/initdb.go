@@ -14,6 +14,12 @@ import (
 )
 
 type Database struct {
+	DB    *gorm.DB
+	SqlDB *sql.DB
+	Config
+}
+
+type Config struct {
 	Host string `mapstructure:"host"`
 	Port string `mapstructure:"port"`
 	Name string `mapstructure:"name"`
@@ -23,11 +29,13 @@ type Database struct {
 
 func New() *Database {
 	return &Database{
-		Host: "127.0.0.1",
-		Port: "3306",
-		Name: "job",
-		User: "root",
-		Pass: "123456789",
+		Config: Config{
+			Host: "127.0.0.1",
+			Port: "3306",
+			Name: "job",
+			User: "root",
+			Pass: "123456789",
+		},
 	}
 }
 
@@ -46,10 +54,10 @@ func (conf *Database) CreateDatabase() error {
 	return nil
 }
 
-func (conf *Database) ConnectDatabase() (*gorm.DB, error) {
+func (conf *Database) ConnectDatabase() error {
 	source := fmt.Sprintf("%s:%s@tcp(%s:%s)", conf.User, conf.Pass, conf.Host, conf.Port)
 	dsn := fmt.Sprintf("%s/%s?charset=utf8mb4&parseTime=True&loc=Local", source, conf.Name)
-	return gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "pt_", // 表名前缀，`User`表为`t_users`
 			SingularTable: true,  // 使用单数表名，启用该选项后，`User` 表将是`user`
@@ -63,13 +71,19 @@ func (conf *Database) ConnectDatabase() (*gorm.DB, error) {
 			},
 		),
 	})
+	if err != nil {
+		return err
+	}
+	conf.DB = db
+	return nil
 }
 
-func SetDatabase(db *gorm.DB) *sql.DB {
-	sqlDB, err := db.DB()
+func (conf *Database) ConnectionPool() error {
+	sqlDB, err := conf.DB.DB()
 	if err != nil {
-		panic(err)
+		return err
 	}
+	conf.SqlDB = sqlDB
 
 	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(10)
@@ -78,7 +92,19 @@ func SetDatabase(db *gorm.DB) *sql.DB {
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
-	return sqlDB
+	return nil
+}
+
+func (conf *Database) GetDB() *gorm.DB {
+	return conf.DB
+}
+
+func (conf *Database) GetSqlDB() *sql.DB {
+	return conf.SqlDB
+}
+
+func (conf *Database) Close() error {
+	return conf.SqlDB.Close()
 }
 
 func InitDB() {
@@ -87,15 +113,17 @@ func InitDB() {
 		panic(err)
 	}
 
-	db, err := n.ConnectDatabase()
-	if err != nil {
+	if err := n.ConnectDatabase(); err != nil {
 		panic(err)
 	}
 
-	sqlDB := SetDatabase(db)
-	defer sqlDB.Close()
+	if err := n.ConnectionPool(); err != nil {
+		panic(err)
+	}
 
-	err = db.AutoMigrate(
+	defer n.Close()
+
+	err := n.GetDB().AutoMigrate(
 		&Ad{},
 		&Article{},
 		&Coupon{},
