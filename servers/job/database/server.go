@@ -123,25 +123,30 @@ func init() {
 	}
 
 	err := DB().AutoMigrate(
+		&Settings{},
+		&University{},
+		&Region{},
+
+		&Order{},
+
 		&Ad{},
 		&Article{},
+
 		&Coupon{},
 		&CouponLog{},
-		&Job{},
-		&JobCategory{},
-		&JobDeliver{},
-		&JobDeliveryMeter{},
-		&JobPromotion{},
-		&JobSettlementType{},
-		&Order{},
-		&Region{},
-		&Settings{},
+
 		&User{},
 		&UserLoginLog{},
 		&UserBalance{},
 		&UserBalanceLog{},
 		&UserCertification{},
-		&University{},
+
+		&JobCategory{},
+		&Job{},
+		&JobDeliver{},
+		&JobDeliveryMeter{},
+		&JobPromotion{},
+		&JobSettlementType{},
 	)
 	if err != nil {
 		log.Fatal(err)
